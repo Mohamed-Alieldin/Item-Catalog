@@ -1,0 +1,21 @@
+
+{% extends "layout.html" %}
+{% block body %}
+<h2>Delete Item</h2>
+
+<p>Are you sure you want to delete {{item_name}}?</p>
+<form action="#" method = 'POST'>
+
+        <button class="button" type="submit" id="submit" type="submit">
+        <span  aria-hidden="true"></span>Delete</button>  
+        
+        <a href = "{{url_for('showItem', category_name = category_name , item_name = item_name)}}">
+                        <button class= "button">
+                        <span  aria-hidden="true"></span> Cancel</button>
+                    </a>
+    
+    </form>
+
+    
+
+{% endblock %}

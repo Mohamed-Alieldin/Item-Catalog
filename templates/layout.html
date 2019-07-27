@@ -1,0 +1,37 @@
+<html>
+    <head>
+        <title>Item Catalog</title>
+        <link rel="stylesheet" type="text/css" href="/static/css/styles.css">
+    </head>
+    <body>
+        <header id="main-header">
+            <div class="container">
+                <h1>Catalog App</h1>
+            </div>
+        </header>
+
+        <nav id="navbar">
+            <div class="container">
+                <ul>
+                    <li ><a href="{{url_for('showCategories')}}">Home</a></li>
+                    {%if login_status == True%}
+                    <li ><a href = "{{url_for('gdisconnect')}}">Logout</a></li>
+                    {%else%}
+                    <li ><a href="{{url_for('showLogin')}}">Login</a></li>
+                    {%endif%}
+                    
+                </ul>
+            </div>
+        </nav>
+        
+        <main>
+            <div class = "container">
+            {% block body %}
+            {% endblock %}
+        </div>
+        </main>
+        <footer id="main-footer">
+                <p>Copyright &copy; 2019 Catalog</p>
+            </footer>
+    </body>
+</html>

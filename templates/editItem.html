@@ -1,0 +1,39 @@
+
+{% extends "layout.html" %}
+{% block body %}
+<h1>Edit Item</h1>
+
+<form class="my-form" action="#" method = "POST">
+        
+    <div class="form-group">
+    <label >New Name:</label>
+    <input type ="text" maxlength="80" name="title" value="{{item.title}}">
+    </div>
+    
+    <div class="form-group">
+        <label for="description">New Description:</label>
+        <textarea  maxlength="250" rows="3" name="description">{{item.description}}</textarea>
+    </div>
+        
+    <div class="form-group">
+        <label for="category">New Category:</label>
+        <select id = "category" name = "category">
+            {%for category in categories%}
+            {% if category.name == category_name %}
+            <option selected value = "{{category.name}}">{{category.name}}</option>
+            {% else %}
+            <option  value = "{{category.name}}">{{category.name}}</option>
+            {% endif %}
+            {%endfor%}                            
+        </select>
+    </div>
+
+        <button class= "button" type="submit" id="submit">Edit</button>
+        <button class= "button"><a  href="{{url_for('showItem', category_name = category_name , item_name = item.title)}}">Cancel</a></button>
+        
+</form>
+
+{% endblock %}
+
+
+
