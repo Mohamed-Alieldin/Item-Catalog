@@ -29,7 +29,10 @@ From your terminal, inside the **vagrant** subdirectory, run the command `vagran
 When `vagrant up` is finished running, you will get your shell prompt back. At this point, you can run `vagrant ssh` to log in to your newly installed Linux VM!
 
 Go to the shared folder with your machine using the command:
-`cd /vagrant`
+`cd /vagrant/catalog`
+
+Install the requirements using the following command:
+`pip3 install -r requirements.txt`
 
 #### Creating the database if not exist
 I am using sqllite database. To create the database, run the following command:
