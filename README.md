@@ -31,11 +31,11 @@ When `vagrant up` is finished running, you will get your shell prompt back. At t
 Go to the shared folder with your machine using the command:
 `cd /vagrant`
 
-#### Running the database
-I am using sqllite database. To run the database, run the following command:
-`python3 Catalog.db`
+#### Creating the database if not exist
+I am using sqllite database. To create the database, run the following command:
+`python3 models.py`
 
-#### Filling the Data
+#### Filling the Data if needed
 To fill the database with basic data use the following command:
 `python3 database_Datafill.py`
 
