@@ -3,6 +3,6 @@
 {% block body %}
 <h2>{{item.title}}</h2>
 <p>{{item.description}}</p>
-<a href="{{url_for('editItem', item_name= item.title)}}">Edit</a>&nbsp;|
-<a href="{{url_for('deleteItem', item_name= item.title)}}">Delete</a>
+<a href="{{url_for('app_views.editItem', item_name= item.title)}}">Edit</a>&nbsp;|
+<a href="{{url_for('app_views.deleteItem', item_name= item.title)}}">Delete</a>
 {% endblock %}

@@ -19,19 +19,19 @@
 <h2>Categories</h2>
 {%for category in categories%}
 <div>
-    <a href="{{url_for('showCategoryItems', category_name = category.name)}}">{{category.name}}</a>
+    <a href="{{url_for('app_views.showCategoryItems', category_name = category.name)}}">{{category.name}}</a>
 </div>
 {%endfor%}
 </section>
 
 <div id = "add-item">
-    <a class = 'add-item' href="{{url_for('newCategoryItem')}}">Add New Item</a>
+    <a class = 'add-item' href="{{url_for('app_views.newCategoryItem')}}">Add New Item</a>
 </div>
 <aside>
 <h2>Latest Items</h2>
 {% for item in items %}
 <div>
-    <a href="{{url_for('showItem',category_name = item.category_name ,item_name = item.title)}}">{{item.title}}</a> 
+    <a href="{{url_for('app_views.showItem',category_name = item.category_name ,item_name = item.title)}}">{{item.title}}</a> 
     <span>({{item.category_name}})</span>
 </div>
 {%endfor%}

@@ -1,2 +1,4 @@
 __pycache__
 Catalog.db
+venv*
+client_secrets.json

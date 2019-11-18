@@ -1,34 +1,40 @@
 #!/usr/bin/env python3
 
-
-from flask import Flask, render_template, request, redirect,jsonify, url_for, flash
-app = Flask(__name__)
-
+# Flask
+from flask import (
+  Flask, 
+  Blueprint, 
+  render_template, 
+  request, 
+  redirect,
+  jsonify, 
+  url_for, 
+  flash,
+  make_response,
+)
+from flask import session as login_session
 from sqlalchemy import create_engine, asc
 from sqlalchemy.orm import sessionmaker
-from models import Base, Category, CategoryItem, User
-from flask import session as login_session
+# utils
 import random, string
-
-from oauth2client.client import flow_from_clientsecrets
-from oauth2client.client import FlowExchangeError
 import httplib2
 import json
-from flask import make_response
 import requests
+# google
+from oauth2client.client import flow_from_clientsecrets
+from oauth2client.client import FlowExchangeError
 
+from models import Base, Category, CategoryItem, User
+from config import CLIENT_ID, SECRETS_FILE
 
-#Connect to Database and create database session
+app_views = Blueprint('app_views', __name__)
 engine = create_engine('sqlite:///Catalog.db')
 Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
-CLIENT_ID = json.loads(open('client_secrets.json', 'r').read())['web']['client_id']
-
-
 
 #Store it in the session for later validation
-@app.route('/login')
-@app.route('/login/')
+@app_views.route('/login')
+@app_views.route('/login/')
 def showLogin():
   login_status = False
   if 'username' in login_session:
@@ -41,7 +47,7 @@ def showLogin():
   return render_template('login.html', thestate=state, login_status = login_status)
 
 
-@app.route('/gconnect', methods = ['POST'])
+@app_views.route('/gconnect', methods = ['POST'])
 def gconnect():
   if request.args.get('state') != login_session['state']:
     response = make_response(json.dumps('Invalid State Parameter'), 401)
@@ -49,7 +55,7 @@ def gconnect():
     return response
   code = request.data
   try:
-    oauth_flow = flow_from_clientsecrets('client_secrets.json', scope='')
+    oauth_flow = flow_from_clientsecrets(SECRETS_FILE, scope='')
     oauth_flow.redirect_uri = 'postmessage'
     credentials = oauth_flow.step2_exchange(code)
   except FlowExchangeError:
@@ -116,7 +122,7 @@ def gconnect():
 
 
 # Disconnect - Revoke a current user's token and reset their login_session
-@app.route('/gdisconnect')
+@app_views.route('/gdisconnect')
 def gdisconnect():
   credentialsToken = login_session.get('credentials_token')
   if credentialsToken is None:
@@ -139,7 +145,7 @@ def gdisconnect():
     response = make_response(json.dumps('Successfully Disconnected'), 200)
     response.headers['Content-Type'] = 'application/json'
     flash("You have logged out.")
-    return redirect(url_for('showCategories'))
+    return redirect(url_for('app_views.showCategories'))
   else:
     # For whatever reason the given token was invalid
     response = make_response(json.dumps('Falied to revoke token for given user'), 400)
@@ -148,7 +154,7 @@ def gdisconnect():
 
 # APIs EndPoints Area
 # One Category Item API EndPoint -- returns a specific item of a specific category
-@app.route('/catalog/items/<item_name>/JSON')
+@app_views.route('/catalog/items/<item_name>/JSON')
 def categoryItemJSON(item_name):
   try:
     session = DBSession()
@@ -160,7 +166,7 @@ def categoryItemJSON(item_name):
     return response
 
 # Category Items API EndPoint -- returns the items of a specific category
-@app.route('/catalog/<category_name>/items/JSON')
+@app_views.route('/catalog/<category_name>/items/JSON')
 def categoryItemsJSON(category_name):
   try:
     session = DBSession()
@@ -173,22 +179,22 @@ def categoryItemsJSON(category_name):
     return response
 
 # All Items API EndPoint-- returns all items
-@app.route('/catalog/items/JSON')
+@app_views.route('/catalog/items/JSON')
 def itemsJSON():
     session = DBSession()
     items = session.query(CategoryItem).all()
     return jsonify(items= [r.serialize for r in items])
 
 # All Categories API EndPoint -- returns all categories
-@app.route('/catalog/categories/JSON')
+@app_views.route('/catalog/categories/JSON')
 def categoriesJSON():
     session = DBSession()
     categories = session.query(Category).all()
     return jsonify(categories= [r.serialize for r in categories])
 
 # App Pages Area
-@app.route('/')
-@app.route('/catalog/')
+@app_views.route('/')
+@app_views.route('/catalog/')
 def showCategories():
   login_status = False
   if 'username' in login_session:
@@ -211,7 +217,7 @@ def showCategories():
   else:
     return render_template('catalog_public.html', categories = categories, items = latestItems_list, login_status =login_status)
 
-@app.route('/catalog/<category_name>/items/')
+@app_views.route('/catalog/<category_name>/items/')
 def showCategoryItems(category_name):
   login_status = False
   if 'username' in login_session:
@@ -228,7 +234,7 @@ def showCategoryItems(category_name):
   return render_template('categoryitems.html', categories = categories, category_name = category_name,
    itemscount = itemscount, items = items, login_status = login_status)
 
-@app.route('/catalog/items/new', methods=['GET','POST'])
+@app_views.route('/catalog/items/new', methods=['GET','POST'])
 def newCategoryItem():  
   if 'username' not in login_session:
     return redirect('/login')
@@ -246,9 +252,9 @@ def newCategoryItem():
     session.add(newItem)
     session.commit()
     flash('Item is successfully created.')
-    return redirect(url_for('showCategories'))
+    return redirect(url_for('app_views.showCategories'))
 
-@app.route('/catalog/<category_name>/<item_name>/')
+@app_views.route('/catalog/<category_name>/<item_name>/')
 def showItem(category_name, item_name):
   if 'username' in login_session:
     login_status = True
@@ -267,7 +273,7 @@ def showItem(category_name, item_name):
     current_item = session.query(CategoryItem).filter_by(title = item_name).one()
     return render_template('item_public.html', item = current_item, login_status = login_status)
 
-@app.route('/catalog/<item_name>/edit/', methods = ['GET', 'POST'])
+@app_views.route('/catalog/<item_name>/edit/', methods = ['GET', 'POST'])
 def editItem(item_name):
   if 'username' not in login_session:
     return redirect('/login')
@@ -291,10 +297,10 @@ def editItem(item_name):
     item_edit.category_id = NewCategory.id
     session.commit()
     flash('Item is successfully edited.')
-    return redirect(url_for('showCategoryItems', category_name = NewCategory.name ))
+    return redirect(url_for('app_views.showCategoryItems', category_name = NewCategory.name ))
 
 
-@app.route('/catalog/<item_name>/delete/', methods = ['GET', 'POST'])
+@app_views.route('/catalog/<item_name>/delete/', methods = ['GET', 'POST'])
 def deleteItem(item_name):
   if 'username' not in login_session:
     return redirect('/login')
@@ -311,7 +317,7 @@ def deleteItem(item_name):
     session.delete(item_delete)
     session.commit()
     flash('Item is successfully deleted')
-    return redirect(url_for('showCategoryItems', category_name = current_categoryName ))
+    return redirect(url_for('app_views.showCategoryItems', category_name = current_categoryName ))
 
 # Users Functions Area
 def GetUserId(email):
@@ -338,8 +344,3 @@ def CreateUser(login_session):
   session.commit()
   user = session.query(User).filter_by(email = login_session['email']).one()
   return user.id
-
-if __name__ == '__main__':
-  app.secret_key = 'super_secret_key'
-  app.debug = True
-  app.run(host = '0.0.0.0', port = 8000)

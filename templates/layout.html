@@ -13,11 +13,11 @@
         <nav id="navbar">
             <div class="container">
                 <ul>
-                    <li ><a href="{{url_for('showCategories')}}">Home</a></li>
+                    <li ><a href="{{url_for('app_views.showCategories')}}">Home</a></li>
                     {%if login_status == True%}
-                    <li ><a href = "{{url_for('gdisconnect')}}">Logout</a></li>
+                    <li ><a href = "{{url_for('app_views.gdisconnect')}}">Logout</a></li>
                     {%else%}
-                    <li ><a href="{{url_for('showLogin')}}">Login</a></li>
+                    <li ><a href="{{url_for('app_views.showLogin')}}">Login</a></li>
                     {%endif%}
                     
                 </ul>

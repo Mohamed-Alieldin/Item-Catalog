@@ -22,13 +22,13 @@
     <h2>Categories</h2>
 {%for category in categories%}
 <div>
-    <a href="{{url_for('showCategoryItems', category_name = category.name)}}">{{category.name}}</a>
+    <a href="{{url_for('app_views.showCategoryItems', category_name = category.name)}}">{{category.name}}</a>
 </div>
 {%endfor%}
 </section>
 
 {%if login_status == True%}
-<div id = "add-item-items"><a href="{{url_for('newCategoryItem')}}">Add New Item</a></div>
+<div id = "add-item-items"><a href="{{url_for('app_views.newCategoryItem')}}">Add New Item</a></div>
 {%endif%}
 
 <aside>
@@ -44,7 +44,7 @@
 
 {% for item in items %}
 <div>
-    <a href="{{url_for('showItem',category_name = category_name ,item_name = item.title)}}">{{item.title}}</a> 
+    <a href="{{url_for('app_views.showItem',category_name = category_name ,item_name = item.title)}}">{{item.title}}</a> 
 </div>
 {%endfor%}
 </aside>
