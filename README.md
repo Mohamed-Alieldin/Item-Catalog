@@ -72,7 +72,6 @@ The database includes three tables:
 4. Go to your browser and open the url `http://localhost:8000/` to view the application home page.
 5. To Enable Google Sign-In:
     1. create your project on [Google Developers Console](https://console.developers.google.com/?pli=1)
-    <br />
     This [link](https://bitwiser.in/2015/09/09/add-google-login-in-flask.html) shows how to add Google Oauth2 login in your flask web app.
     2. Download secrets file and rename it with "Client_Secrets"
 
