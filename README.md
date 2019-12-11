@@ -66,10 +66,16 @@ The database includes three tables:
 + The `user` table includes information about each user.
 
 ## Running The APP
-1. Make sure to log into the VM as described above.
+1. Make sure to log into the virtual environment as described above.
 2. Place your source code in the `vagrant\catalog` directory.
 3. Use the command `python application.py`
 4. Go to your browser and open the url `http://localhost:8000/` to view the application home page.
+5. To Enable Google Sign-In:
+    1. create your project on [Google Developers Console](https://console.developers.google.com/?pli=1)
+    <br />
+    This [link](https://bitwiser.in/2015/09/09/add-google-login-in-flask.html) shows how to add Google Oauth2 login in your flask web app.
+    2. Download secrets file and rename it with "Client_Secrets"
+
 
 ## Code Design
 The code includes five areas:
