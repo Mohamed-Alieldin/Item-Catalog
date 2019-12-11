@@ -4,6 +4,8 @@
 _______________________
 ## About
 This project is part of the full stack web development nano degree on Udacity. The project is an application that provides a list of items within a variety of categories as well as provide a user registration and authentication system. Registered users will have the ability to post, edit and delete their own items.
+<br />
+In this application, the main focus was on the functionalities and data manipulation. The designs and styles were out of scope.
 
 ## Prerequisites
 * Python 3 [Download it from python.org.](https://www.python.org/downloads/)
@@ -13,6 +15,11 @@ This project is part of the full stack web development nano degree on Udacity. T
 ## Installation
 
 #### Download the VM configuration
+
+##### 1. Using Python Virtual Environment
+First, cd in Item Catalog folder. Then, create a virtual environment using this command `virtualenv env`. This will create a virual enviroment with the name "env".
+
+##### 2. Using Vagrant and VirtualBox
 There are a couple of different ways you can download the VM configuration:
 
 You can download and unzip this file: [FSND-Virtual-Machine.zip](https://s3.amazonaws.com/video.udacity-data.com/topher/2018/April/5acfbfa3_fsnd-virtual-machine/fsnd-virtual-machine.zip) This will give you a directory called **FSND-Virtual-Machine**. It may be located inside your **Downloads** folder.
@@ -24,6 +31,16 @@ Alternately, you can use Github to fork and clone the repository [https://github
 Either way, you will end up with a new directory containing the VM files. Change to this directory in your terminal with `cd`. Inside, you will find another directory called **vagrant**. Change directory to the **vagrant** directory.
 
 #### Start the virtual machine
+##### 1. Using Python Virtual Environment
+To activate virtualenv on Windows, activate script in the Scripts folder :
+`\env\Scripts\activate`
+<br />
+
+Install the requirements for windows using the command:
+`pip install -r requirements.txt`
+
+
+##### 2. Using Vagrant
 From your terminal, inside the **vagrant** subdirectory, run the command `vagrant up`. This will cause Vagrant to download the Linux operating system and install it. This may take quite a while (many minutes) depending on how fast your Internet connection is.
 
 When `vagrant up` is finished running, you will get your shell prompt back. At this point, you can run `vagrant ssh` to log in to your newly installed Linux VM!
